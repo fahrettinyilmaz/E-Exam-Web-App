@@ -1,0 +1,39 @@
+@model IEnumerable<EExamWebApp.Models.User>
+
+@{
+    ViewBag.Title = "Users List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Create New User", "CreateUser", "Admin", null, new { @class = "btn btn-primary" })
+</p>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>User Type</th>
+        <th>Approved</th>
+        <th>Actions</th> <!-- Column for actions -->
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@user.Username</td>
+            <td>@user.Email</td>
+            <td>@user.UserType</td>
+            <td>@(user.IsApproved ? "Yes" : "No")</td>
+            <td>
+                @Html.ActionLink("Edit", "EditUser", "Admin", new { id = user.Id }, new { @class = "btn btn-small btn-warning" })
+                @Html.ActionLink("Delete", "DeleteUser", "Admin", new { id = user.Id }, new { @class = "btn btn-small btn-danger" })
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

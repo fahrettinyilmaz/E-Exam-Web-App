@@ -39,8 +39,7 @@ namespace EExamWebApp.Controllers
                 {
                     if (isApproved)
                     {
-                        // User is authenticated and approved
-                        // Log the user in (set session, cookies, etc.)
+                        Session["UserEmail"] = GetEmailByUsername(user.Username);
                         FormsAuthentication.SetAuthCookie(user.Username, false); // If using Forms Authentication
                         return RedirectToAction("Index", "Home");
                     }
@@ -66,9 +65,9 @@ namespace EExamWebApp.Controllers
 
             var userTypes = new List<SelectListItem>
             {
-                new SelectListItem { Text = "Admin", Value = "1" },
-                new SelectListItem { Text = "User", Value = "2" },
-                new SelectListItem { Text = "Guest", Value = "3" }
+                new SelectListItem { Text = "Admin", Value = "0" },
+                new SelectListItem { Text = "User", Value = "1" },
+                new SelectListItem { Text = "Guest", Value = "2" }
                 // Add other user types as necessary
             };
 
@@ -168,6 +167,12 @@ namespace EExamWebApp.Controllers
             // For example, using BCrypt.Net: https://www.nuget.org/packages/BCrypt.Net-Next/
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
-
+        private string GetEmailByUsername(string username)
+        {
+            using (var context = new AppDbContext())
+            {
+                return context.Users.Where(u => u.Username == username).Select(u => u.Email).FirstOrDefault();
+            }
+        }
     }
 }

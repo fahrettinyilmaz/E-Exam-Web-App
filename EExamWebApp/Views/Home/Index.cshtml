@@ -6,9 +6,10 @@
 <h2>Welcome to E-Exam</h2>
 <p>Manage your exams with ease.</p>
 
-@if (ViewBag.UserRole != "Guest") // Check if the user is not a guest
+@if (ViewBag.UserRole == "Admin") // Check if the user is not a guest
 {
     <p>Logged in as: <strong>@ViewBag.UserRole</strong></p>
+    
 }
 else
 {

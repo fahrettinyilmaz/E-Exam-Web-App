@@ -60,8 +60,8 @@ namespace EExamWebApp.Controllers
             {
                 if (userRole == "Admin")
                 {
-                    List<User> users = context.Users.ToList();
-                    return View("ListUsers", users);
+                    return RedirectToAction("ListUsers", "Admin");
+
                 }
                 else if (userRole == "Teacher" || userRole == "Student")
                 {

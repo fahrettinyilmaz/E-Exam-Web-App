@@ -191,8 +191,11 @@
         <Content Include="Views\Account\Register.cshtml" />
         <Content Include="Views\Account\RegistrationPending.cshtml" />
         <Content Include="Views\Admin\ApproveUsers.cshtml" />
+        <Content Include="Views\Admin\CreateUser.cshtml" />
+        <Content Include="Views\Admin\DeleteUser.cshtml" />
+        <Content Include="Views\Admin\EditUser.cshtml" />
+        <Content Include="Views\Admin\ListUsers.cshtml" />
         <Content Include="Views\Home\ListCourses.cshtml" />
-        <Content Include="Views\Home\ListUsers.cshtml" />
         <Content Include="Web.config" />
         <Content Include="Web.Debug.config">
             <DependentUpon>Web.config</DependentUpon>
