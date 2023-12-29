@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "E-Exam Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Welcome to E-Exam</h2>
+<p>Manage your exams with ease.</p>
+
+@if (ViewBag.UserRole != "Guest") // Check if the user is not a guest
+{
+    <p>Logged in as: <strong>@ViewBag.UserRole</strong></p>
+}
+else
+{
+    <strong>@ViewBag.UserRole</strong>
+    <!-- Buttons for Login and Register -->
+    <div>
+        <a href="@Url.Action("Login", "Account")" class="btn btn-primary">Login</a>
+        <a href="@Url.Action("Register", "Account")" class="btn btn-success">Register</a>
+    </div>
+}

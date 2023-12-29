@@ -1,0 +1,14 @@
+@model IEnumerable<EExamWebApp.Models.User>
+
+<!-- List users and provide an option to approve each one -->
+@foreach (var user in Model)
+{
+    using (Html.BeginForm("ApproveUsers", "Admin"))
+    {
+        @Html.HiddenFor(u => user.Id)
+        <p>
+            @user.Username - @user.Email
+            <button type="submit" class="btn btn-success">Approve</button>
+        </p>
+    }
+}
