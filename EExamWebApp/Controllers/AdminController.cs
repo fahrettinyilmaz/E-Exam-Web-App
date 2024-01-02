@@ -1,13 +1,16 @@
 using System.Linq;
 using System.Web.Mvc;
 using EExamWebApp.Data;
+using EExamWebApp.Filters;
 using EExamWebApp.Models;
 
 namespace EExamWebApp.Controllers
 {
+    [AuthorizeUserType(UserType.Admin)]
     public class AdminController : Controller
     {
         private AppDbContext db = new AppDbContext();
+
 
         public ActionResult ApproveUsers()
         {
@@ -19,7 +22,7 @@ namespace EExamWebApp.Controllers
         {
             return View();
         }
-        
+
         public ActionResult ListUsers()
         {
             var users = db.Users.ToList();
@@ -36,6 +39,7 @@ namespace EExamWebApp.Controllers
                 db.SaveChanges();
                 return RedirectToAction("ApproveUsers");
             }
+
             return View(user);
         }
 
@@ -46,6 +50,7 @@ namespace EExamWebApp.Controllers
             {
                 return HttpNotFound();
             }
+
             return View(user);
         }
 
@@ -59,6 +64,7 @@ namespace EExamWebApp.Controllers
                 db.SaveChanges();
                 return RedirectToAction("ApproveUsers");
             }
+
             return View(user);
         }
 
@@ -69,6 +75,7 @@ namespace EExamWebApp.Controllers
             {
                 return HttpNotFound();
             }
+
             return View(user);
         }
 

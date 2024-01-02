@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
+
 namespace EExamWebApp
 {
     public class RouteConfig
@@ -12,7 +13,16 @@ namespace EExamWebApp
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
+            routes.MapRoute(
+                name: "AccessDenied",
+                url: "AccessDenied",
+                defaults: new { controller = "Error", action = "AccessDenied" }
+            );
+            routes.MapRoute(
+                name: "GetCurrentStudents",
+                url: "CourseManagement/GetCurrentStudents/{id}",
+                defaults: new { controller = "CourseManagement", action = "GetCurrentStudents" }
+            );
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

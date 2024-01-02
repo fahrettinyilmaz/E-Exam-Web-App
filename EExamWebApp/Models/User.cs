@@ -13,14 +13,15 @@ namespace EExamWebApp.Models
     {
         public int Id { get; set; }
         public string Username { get; set; }
-        public string Password { get; set; } 
+        public string Name { get; set; }
+        public string LastName { get; set; }
+        public string Password { get; set; }
         public string Email { get; set; }
-        public UserType UserType { get; set; } 
+        public UserType UserType { get; set; }
         public bool IsApproved { get; set; } = false;
-        
-        public virtual ICollection<Course> Courses { get; set; }
-        
-        public virtual ICollection<Enrollment> Enrollments { get; set; }
 
+        public virtual ICollection<Course> Courses { get; set; }
+
+        public virtual ICollection<Enrollment> Enrollments { get; set; }
     }
 }

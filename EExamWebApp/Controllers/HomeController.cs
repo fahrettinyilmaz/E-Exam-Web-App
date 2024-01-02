@@ -10,28 +10,8 @@ using EExamWebApp.Models;
 
 namespace EExamWebApp.Controllers
 {
-    public class HomeController : Controller
-    {   
-        
-        private int GetCurrentUserId()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                using (var context = new AppDbContext())
-                {
-                    var username = User.Identity.Name;
-                    var user = context.Users.SingleOrDefault(u => u.Username == username);
-
-                    if (user != null)
-                    {
-                        return user.Id;
-                    }
-                }
-            }
-
-            return -1; // or throw an exception, or handle this case as appropriate
-        }
-        
+    public class HomeController : BaseController
+    {
         private string GetUserRole()
         {
             if (User.Identity.IsAuthenticated)
@@ -61,7 +41,6 @@ namespace EExamWebApp.Controllers
                 if (userRole == "Admin")
                 {
                     return RedirectToAction("ListUsers", "Admin");
-
                 }
                 else if (userRole == "Teacher" || userRole == "Student")
                 {
@@ -91,6 +70,7 @@ namespace EExamWebApp.Controllers
                 return View();
             }
         }
+
         [Authorize]
         public ActionResult ListCourses()
         {
@@ -101,7 +81,7 @@ namespace EExamWebApp.Controllers
             }
         }
 
-    
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -114,5 +94,4 @@ namespace EExamWebApp.Controllers
             return View();
         }
     }
-
 }

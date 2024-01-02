@@ -1,7 +1,37 @@
 ﻿@{
     ViewBag.Title = "About";
+    ViewBag.Message = "Our Team for the E-Exam Application Project";
 }
-<h2>@ViewBag.Title.</h2>
+<style>
+     .team-members ul {
+         list-style-type: none;
+         padding: 0;
+     }
+ 
+     .team-members li {
+         margin-bottom: 10px;
+         font-size: 1.1em;
+     }
+ 
+     .team-members strong {
+         font-weight: bold;
+     }
+ </style>
+
+
+<h2>@ViewBag.Title</h2>
 <h3>@ViewBag.Message</h3>
 
-<p>Use this area to provide additional information.</p>
+<p>This project is developed as part of our school's web development curriculum. Below are the team members who contributed to this project:</p>
+
+<div class="team-members">
+    <ul>
+        <li><strong>DEMET DEMİR</strong> (Leader) - 1921221024</li>
+        <li>RABİA DEMİRBAĞ (Member) - 1921221032</li>
+        <li>MERT AKSU (Member) - 1621221019</li>
+        <li>MELİKE KEÇELİOĞLU (Member) - 1921221014</li>
+        <li>FAHRETTİN YILMAZ (Member) - 1221221047</li>
+    </ul>
+</div>
+
+<p>Use this area to provide additional information about your project, its goals, and any other relevant details.</p>

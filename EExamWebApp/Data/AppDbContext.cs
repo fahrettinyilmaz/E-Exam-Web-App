@@ -17,11 +17,10 @@ namespace EExamWebApp.Data
         public DbSet<Option> Options { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<Course> Courses { get; set; }
-    
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-        
         }
     }
 }

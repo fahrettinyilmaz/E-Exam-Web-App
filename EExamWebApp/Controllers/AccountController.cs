@@ -11,7 +11,7 @@ using EExamWebApp.Data;
 namespace EExamWebApp.Controllers
 {
     public class AccountController : Controller
-    {   
+    {
         public static SelectList GetUserTypesForRegistration()
         {
             var values = from UserType e in Enum.GetValues(typeof(UserType))
@@ -58,6 +58,7 @@ namespace EExamWebApp.Controllers
             // If we got this far, something failed; redisplay the form
             return View(user);
         }
+
         private IEnumerable<SelectListItem> GetUserTypes()
         {
             // This is an example. Replace it with your actual logic to get user types.
@@ -80,7 +81,7 @@ namespace EExamWebApp.Controllers
         {
             ViewBag.UserTypeSelectList = new SelectList(GetUserTypes(), "Value", "Text");
             return View();
-        }   
+        }
 
         // POST: Account/Register
         [HttpPost]
@@ -105,6 +106,7 @@ namespace EExamWebApp.Controllers
             // If we got this far, something failed; redisplay the form
             return View(user);
         }
+
         public ActionResult Logout()
         {
             // Invalidate the user's authentication cookie
@@ -116,6 +118,7 @@ namespace EExamWebApp.Controllers
             // Redirect the user to the login page, home page, or any other page
             return RedirectToAction("Login", "Account");
         }
+
         public ActionResult RegistrationPending()
         {
             return View();
@@ -132,10 +135,10 @@ namespace EExamWebApp.Controllers
                 {
                     return (true, user.IsApproved);
                 }
+
                 return (false, false);
             }
         }
-
 
 
         private bool RegisterUser(User user)
@@ -143,7 +146,8 @@ namespace EExamWebApp.Controllers
             using (var context = new AppDbContext())
             {
                 // Check if the user already exists
-                var existingUser = context.Users.FirstOrDefault(u => u.Username == user.Username || u.Email == user.Email);
+                var existingUser =
+                    context.Users.FirstOrDefault(u => u.Username == user.Username || u.Email == user.Email);
                 if (existingUser != null)
                 {
                     // User already exists
@@ -167,6 +171,7 @@ namespace EExamWebApp.Controllers
             // For example, using BCrypt.Net: https://www.nuget.org/packages/BCrypt.Net-Next/
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
+
         private string GetEmailByUsername(string username)
         {
             using (var context = new AppDbContext())
