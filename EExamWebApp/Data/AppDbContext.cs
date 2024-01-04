@@ -1,7 +1,6 @@
 using System.Data.Entity;
 using EExamWebApp.Models;
 
-
 namespace EExamWebApp.Data
 {
     public class AppDbContext : DbContext

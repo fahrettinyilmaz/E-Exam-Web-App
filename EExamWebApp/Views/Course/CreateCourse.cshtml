@@ -1,8 +1,26 @@
 @model EExamWebApp.Models.Course
-
 @{
-    ViewBag.Title = "title";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Create Course";
 }
 
-<h2>title</h2>
+<h2>Create Course</h2>
+
+@using (Html.BeginForm()) 
+{   
+    @Html.AntiForgeryToken()
+    <div>
+        <label for="title">Course Title:</label>
+        @Html.TextBoxFor(m => m.Title)
+    </div>
+    <div>
+        <label for="description">Description:</label>
+        @Html.TextAreaFor(m => m.Description)
+    </div>
+    <div>
+        <label for="teacher">Teacher:</label>
+        @Html.DropDownListFor(m => m.TeacherId, (SelectList)ViewBag.Teachers, "Select a Teacher")
+    </div>
+    <button type="submit">Create Course</button>
+}
+
+@Scripts.Render("~/bundles/jqueryval")

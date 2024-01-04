@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
-
 
 namespace EExamWebApp
 {
@@ -14,19 +9,19 @@ namespace EExamWebApp
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.MapRoute(
-                name: "AccessDenied",
-                url: "AccessDenied",
-                defaults: new { controller = "Error", action = "AccessDenied" }
+                "AccessDenied",
+                "AccessDenied",
+                new { controller = "Error", action = "AccessDenied" }
             );
             routes.MapRoute(
-                name: "GetCurrentStudents",
-                url: "CourseManagement/GetCurrentStudents/{id}",
-                defaults: new { controller = "CourseManagement", action = "GetCurrentStudents" }
+                "GetCurrentStudents",
+                "Course/GetCurrentStudents/{id}",
+                new { controller = "Course", action = "GetCurrentStudents" }
             );
             routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                "Default",
+                "{controller}/{action}/{id}",
+                new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

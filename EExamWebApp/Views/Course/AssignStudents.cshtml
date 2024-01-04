@@ -4,6 +4,7 @@
     ViewBag.Title = "Assign Students to Course";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 @Html.Hidden("StudentEmails", Newtonsoft.Json.JsonConvert.SerializeObject(Model.StudentEmails))
 
 @using (Html.BeginForm("AssignStudents", "Course", FormMethod.Post, new { id = "addStudentsForm" }))
@@ -117,3 +118,4 @@
 
        });
    </script>
+}

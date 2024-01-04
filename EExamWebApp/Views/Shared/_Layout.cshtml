@@ -20,14 +20,14 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li>@Html.ActionLink("Home", "AssignStudents", "Course")</li>
-                <li>@Html.ActionLink("About", "About", "Home")</li>
-                <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                @* <li>@Html.ActionLink("Home", "AssignStudents", "Course")</li> *@
+                @* <li>@Html.ActionLink("About", "About", "Home")</li> *@
+                @* <li>@Html.ActionLink("Contact", "Contact", "Home")</li> *@
             </ul>
             @if (User.Identity.IsAuthenticated)
             {
                 <ul class="nav navbar-nav navbar-right">
-                    <li>@(Session["UserEmail"] != null ? Html.ActionLink(Session["UserEmail"].ToString(), "Index", "Home", null, new { @style = "pointer-events:none; cursor:default; color:white" }) : Html.Raw(""))</li>
+                    <li>@(Session["UserEmail"] != null ? Html.ActionLink(Session["UserEmail"].ToString(), "Index", "Home", null, new { style = "pointer-events:none; cursor:default; color:white" }) : Html.Raw(""))</li>
                     <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
                 </ul>
             }
@@ -45,6 +45,6 @@
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/bootstrap")
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-@RenderSection("scripts", required: false)
+@RenderSection("scripts", false)
 </body>
 </html>

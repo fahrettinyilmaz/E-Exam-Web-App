@@ -1,9 +1,8 @@
-using EExamWebApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Data.Entity;
 using EExamWebApp.Data;
+using EExamWebApp.Models;
 
 namespace EExamWebApp.Seeders
 {
@@ -54,7 +53,7 @@ namespace EExamWebApp.Seeders
             // Seed Teachers
             Console.Out.WriteLine("Seed Teachers");
             var teachers = new List<User>();
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
                 var firstName = firstNames[random.Next(firstNames.Count)];
                 var lastName = lastNames[random.Next(lastNames.Count)];
@@ -80,7 +79,7 @@ namespace EExamWebApp.Seeders
             // Seed Students
             Console.Out.WriteLine("Seed Students");
             var students = new List<User>();
-            for (int i = 0; i < 50; i++)
+            for (var i = 0; i < 50; i++)
             {
                 var firstName = firstNames[random.Next(firstNames.Count)];
                 var lastName = lastNames[random.Next(lastNames.Count)];
@@ -131,16 +130,14 @@ namespace EExamWebApp.Seeders
                 }
 
                 // Seed Questions and Options
-                for (int q = 0; q < 10; q++)
+                for (var q = 0; q < 10; q++)
                 {
                     var question = new Question { Text = $"Question {q + 1}", Options = new List<Option>() };
 
                     // Seed Options
-                    for (int o = 0; o < 5; o++)
-                    {
+                    for (var o = 0; o < 5; o++)
                         question.Options.Add(new Option
                             { Text = $"Option {o + 1}", IsCorrect = o == 0 }); // Mark the first option as correct
-                    }
 
                     exam.Questions.Add(question);
                 }

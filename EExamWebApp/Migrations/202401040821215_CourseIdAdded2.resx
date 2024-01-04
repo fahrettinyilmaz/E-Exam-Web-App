@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+                id="root"
+                xmlns="">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1"/>
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <data name="Target">
+        <value>
+            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
+        </value>
+    </data>
+    <data name="DefaultSchema">
+        <value>dbo</value>
+    </data>
+</root>

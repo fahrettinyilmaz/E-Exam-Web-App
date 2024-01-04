@@ -6,16 +6,27 @@
 <h2>Welcome to E-Exam</h2>
 <p>Manage your exams with ease.</p>
 
-@* @if (ViewBag.UserRole == "Admin") // Check if the user is not a guest *@
-@* { *@
-@*     <p>Logged in as: <strong>@ViewBag.UserRole</strong></p> *@
-@*      *@
-@* } *@
-@* else *@
-@* { *@
-<strong>@ViewBag.UserRole</strong>
-<!-- Buttons for Login and Register -->
-<div>
-    <a href="@Url.Action("Login", "Account")" class="btn btn-primary">Login</a>
-    <a href="@Url.Action("Register", "Account")" class="btn btn-success">Register</a>
-</div>
+@if (User.Identity.IsAuthenticated)
+{
+    <p>Welcome back, <strong>@ViewBag.UserFullName</strong>!</p>
+    <!-- Buttons for Course List, Upcoming Exams, Exam Results -->
+    <div class="buttons-container">
+        @Html.ActionLink("Course List", "ListCourses", "Course", new { }, new { @class = "btn btn-info" })
+        @Html.ActionLink("Users Exams", "Index", "Course", new { }, new { @class = "btn btn-warning" })
+        @Html.ActionLink("Exam Results", "Index", "Course", new { }, new { @class = "btn btn-success" })
+    </div>
+}
+else
+{
+    <!-- Buttons for Login and Register -->
+    <div>
+        @Html.ActionLink("Login", "Login", "Account", new { }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Register", "Register", "Account", new { }, new { @class = "btn btn-success" })
+    </div>
+}
+
+<style>
+    .buttons-container {
+        margin-top: 20px;
+    }
+</style>

@@ -11,4 +11,4 @@ namespace EExamWebApp.Models
 
         public virtual Exam Exam { get; set; }
     }
-} 
+}

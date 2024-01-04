@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Web.Mvc;
-using EExamWebApp.Models;
 using System.Linq;
+using System.Web.Mvc;
 using System.Web.Security;
 using EExamWebApp.Data;
+using EExamWebApp.Models;
 
 // Include any other necessary namespaces
 
@@ -43,16 +43,12 @@ namespace EExamWebApp.Controllers
                         FormsAuthentication.SetAuthCookie(user.Username, false); // If using Forms Authentication
                         return RedirectToAction("Index", "Home");
                     }
-                    else
-                    {
-                        // User is authenticated but not approved
-                        return RedirectToAction("RegistrationPending");
-                    }
+
+                    // User is authenticated but not approved
+                    return RedirectToAction("RegistrationPending");
                 }
-                else
-                {
-                    ModelState.AddModelError("", "Invalid username or password");
-                }
+
+                ModelState.AddModelError("", "Invalid username or password");
             }
 
             // If we got this far, something failed; redisplay the form
@@ -91,16 +87,11 @@ namespace EExamWebApp.Controllers
             if (ModelState.IsValid)
             {
                 user.IsApproved = false; // Set the user as not approved by default
-                bool registrationSuccessful = RegisterUser(user);
+                var registrationSuccessful = RegisterUser(user);
                 if (registrationSuccessful)
-                {
                     // Optionally, you can redirect to a "Registration Successful" page
                     return RedirectToAction("RegistrationPending");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "User already exists or an error occurred.");
-                }
+                ModelState.AddModelError("", "User already exists or an error occurred.");
             }
 
             // If we got this far, something failed; redisplay the form
@@ -131,10 +122,7 @@ namespace EExamWebApp.Controllers
             {
                 var user = context.Users.FirstOrDefault(u => u.Username == username);
 
-                if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
-                {
-                    return (true, user.IsApproved);
-                }
+                if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password)) return (true, user.IsApproved);
 
                 return (false, false);
             }
@@ -149,10 +137,8 @@ namespace EExamWebApp.Controllers
                 var existingUser =
                     context.Users.FirstOrDefault(u => u.Username == user.Username || u.Email == user.Email);
                 if (existingUser != null)
-                {
                     // User already exists
                     return false;
-                }
 
                 // Hash the password - very important for security
                 user.Password = HashPassword(user.Password);

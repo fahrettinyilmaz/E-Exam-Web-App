@@ -281,3 +281,7 @@
 /Users/fahrettinyilmaz/Desktop/EExamWebApp/EExamWebApp/obj/Debug/EExamWebApp.dll
 /Users/fahrettinyilmaz/Desktop/EExamWebApp/EExamWebApp/obj/Debug/EExamWebApp.pdb
 /Users/fahrettinyilmaz/Desktop/EExamWebApp/EExamWebApp/obj/Debug/EExamWebApp.Migrations.NameLastNameAddedToUser.resources
+/Users/fahrettinyilmaz/Desktop/EExamWebApp/EExamWebApp/obj/Debug/EExamWebApp.Migrations.CourseIdAddedExam.resources
+/Users/fahrettinyilmaz/Desktop/EExamWebApp/EExamWebApp/obj/Debug/EExamWebApp.Migrations.CourseIdAdded2.resources
+/Users/fahrettinyilmaz/Desktop/EExamWebApp/EExamWebApp/obj/Debug/EExamWebApp.Migrations.ExamDateDuration.resources
+/Users/fahrettinyilmaz/Desktop/EExamWebApp/EExamWebApp/obj/Debug/EExamWebApp.Migrations.TeacherIdAddedCourse.resources

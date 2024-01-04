@@ -1,29 +1,58 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using EExamWebApp.Models;
 using EExamWebApp.Data;
 using EExamWebApp.Filters;
+using EExamWebApp.Models;
 using EExamWebApp.ViewModels;
 
 namespace EExamWebApp.Controllers
 {
     public class CourseController : BaseController
     {
-        private AppDbContext db = new AppDbContext();
+        private readonly AppDbContext _db = new AppDbContext();
+        
+        public ActionResult Exams(int? courseId)
+        {
+            ViewBag.UserRole = GetUserRole();
+            if (courseId == null)
+            {
+                // Handle the missing parameter case, e.g., redirect to another page or show an error message
+                return RedirectToAction("Index"); // Example redirection
+            }
 
-        // Action to show list of courses (for both Admin and Teacher)
+            using (var context = new AppDbContext())
+            {
+                var exams = context.Exams.Where(e => e.CourseId == courseId.Value).ToList();
+                ViewBag.CourseId = courseId.Value;
+                return View(exams);
+            }
+        }
+        
+        
+
+       
+
         public ActionResult Index()
         {
-            var courses = db.Courses.ToList();
-            return View(courses);
+            return View();
         }
-
         // Action for Admin to create a new course
-        [AuthorizeUserType(UserType.Admin)]
+        [AuthorizeUserType(UserType.Admin)] // Custom authorization attribute
         public ActionResult CreateCourse()
         {
-            // You might need to pass a list of teachers to the view for selection
+            var teachers = _db.Users
+                .Where(u => u.UserType == UserType.Teacher)
+                .Select(u => new 
+                { 
+                    Id = u.Id, 
+                    FullName = u.Name + " " + u.LastName 
+                })
+                .ToList();
+
+            ViewBag.Teachers = new SelectList(teachers, "Id", "FullName");
+
             return View();
         }
 
@@ -32,14 +61,10 @@ namespace EExamWebApp.Controllers
         [AuthorizeUserType(UserType.Admin)]
         public ActionResult CreateCourse(Course course)
         {
-            if (ModelState.IsValid)
-            {
-                db.Courses.Add(course);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(course);
+            if (!ModelState.IsValid) return View(course);
+            _db.Courses.Add(course);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         // Action for Admin to assign a teacher to a course
@@ -58,14 +83,14 @@ namespace EExamWebApp.Controllers
             // Logic to assign the teacher to the course
             return RedirectToAction("Index");
         }
-        
+
         public ActionResult GetAvailableStudents(int courseId)
         {
             // Fetch all students
-            var allStudents = db.Users.Where(u => u.UserType == UserType.Student).ToList();
+            var allStudents = _db.Users.Where(u => u.UserType == UserType.Student).ToList();
 
             // Fetch students already enrolled in the selected course
-            var enrolledStudents = db.Enrollments
+            var enrolledStudents = _db.Enrollments
                 .Where(e => e.CourseId == courseId)
                 .Select(e => e.Student)
                 .ToList();
@@ -79,35 +104,69 @@ namespace EExamWebApp.Controllers
                 Students = availableStudents.Select(s => new SelectListItem
                 {
                     Value = s.Id.ToString(),
-                    Text = s.Name + " " + s.LastName
+                    Text = s.Name + @" " + s.LastName
                 }).ToList()
             };
-            
-           
+
 
             // Return the partial view with the filtered list of students
             return PartialView("_AvailableStudentsPartial", viewModel);
         }
 
+        [Authorize]
+        public ActionResult ListCourses()
+        {
+            
+            var userRole = GetUserRole();
+            var courses = new List<Course>();
+            ViewBag.UserRole = userRole;
+           
+            // Pass this dictionary to the view
+            
+
+            switch (userRole)
+            {
+                case "Admin":
+                    courses = _db.Courses.ToList();
+                    break;
+
+                case "Teacher":
+                    var teacherId = GetCurrentUserId();
+                    courses = _db.Courses.Where(c => c.Teacher.Id == teacherId).ToList();
+                    break;
+
+                case "Student":
+                    var studentId = GetCurrentUserId();
+                    courses = _db.Enrollments.Where(e => e.Student.Id == studentId)
+                        .Select(e => e.Course)
+                        .Distinct()
+                        .ToList();
+                    break;
+            }
+
+
+            return View(courses);
+        }
+
+
         // Action for Teacher to add students to a course
         [AuthorizeUserType(UserType.Teacher)]
         public ActionResult AssignStudents(int? selectedCourseId)
         {
-            var students = db.Users.Where(u => u.UserType == UserType.Student).ToList();
-         
-            int currentTeacherId = GetCurrentUserId(); // Implement this method to get current teacher's ID
-            var model = new CourseViewModel()
+            var students = _db.Users.Where(u => u.UserType == UserType.Student).ToList();
+
+            var currentTeacherId = GetCurrentUserId(); // Implement this method to get current teacher's ID
+            var model = new CourseViewModel
             {
-                Courses = db.Courses
+                Courses = _db.Courses
                     .Where(c => c.Teacher.Id == currentTeacherId)
                     .Select(c => new SelectListItem
                     {
                         Value = c.Id.ToString(),
                         Text = c.Title
-                    })
-                ,
-                
-                StudentEmails = db.Users
+                    }),
+
+                StudentEmails = _db.Users
                     .Where(u => u.UserType == UserType.Student)
                     .Select(s => new { s.Id, s.Email })
                     .ToDictionary(s => s.Id.ToString(), s => s.Email)
@@ -116,7 +175,7 @@ namespace EExamWebApp.Controllers
             if (selectedCourseId.HasValue)
             {
                 model.SelectedCourseId = selectedCourseId.Value;
-                model.CurrentStudents = db.Enrollments
+                model.CurrentStudents = _db.Enrollments
                     .Where(e => e.CourseId == selectedCourseId.Value)
                     .Select(e => e.Student)
                     .ToList();
@@ -129,12 +188,12 @@ namespace EExamWebApp.Controllers
         public ActionResult GetCurrentStudents(int courseId)
         {
             // Fetch current students for the selected course
-            var currentStudents = db.Enrollments
+            var currentStudents = _db.Enrollments
                 .Where(e => e.CourseId == courseId)
                 .Select(e => e.Student);
 
 
-            return PartialView("_CurrentStudentsPartial", new CourseViewModel()
+            return PartialView("_CurrentStudentsPartial", new CourseViewModel
             {
                 CurrentStudents = currentStudents
             });
@@ -146,28 +205,26 @@ namespace EExamWebApp.Controllers
         [AuthorizeUserType(UserType.Teacher)]
         public ActionResult AssignStudents(FormCollection form)
         {
-            int courseId = int.Parse(form["SelectedCourseId"]);
-            string[] studentIdStrings = form.GetValues("SelectedStudentIds");
-            int[] studentIds = studentIdStrings?.Select(int.Parse).ToArray();
+            var courseId = int.Parse(form["SelectedCourseId"]);
+            var studentIdStrings = form.GetValues("SelectedStudentIds");
+            var studentIds = studentIdStrings?.Select(int.Parse).ToArray();
 
 
             // Assuming you have a DbContext 'db'
-            var course = db.Courses.FirstOrDefault(c => c.Id == courseId);
+            var course = _db.Courses.FirstOrDefault(c => c.Id == courseId);
             if (course == null)
-            {
                 // Handle the case where the course is not found
                 return HttpNotFound();
-            }
 
             foreach (var studentId in studentIds)
             {
                 Console.WriteLine(studentId);
                 // Check if the student is already enrolled in the course
                 var existingEnrollment =
-                    db.Enrollments.FirstOrDefault(e => e.CourseId == courseId && e.Student.Id == studentId);
+                    _db.Enrollments.FirstOrDefault(e => e.CourseId == courseId && e.Student.Id == studentId);
                 if (existingEnrollment == null)
                 {
-                    var student = db.Users.FirstOrDefault(u => u.Id == studentId);
+                    var student = _db.Users.FirstOrDefault(u => u.Id == studentId);
                     if (student != null)
                     {
                         // Create a new enrollment if the student is not already enrolled
@@ -177,13 +234,13 @@ namespace EExamWebApp.Controllers
                             Student = student,
                             EnrollmentDate = DateTime.Now
                         };
-                        db.Enrollments.Add(newEnrollment);
+                        _db.Enrollments.Add(newEnrollment);
                     }
                 }
             }
 
             // Save the changes to the database
-            db.SaveChanges();
+            _db.SaveChanges();
 
             // Redirect to an appropriate action after adding students
             return RedirectToAction("AssignStudents"); // Adjust as needed

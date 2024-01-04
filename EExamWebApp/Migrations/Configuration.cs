@@ -1,11 +1,9 @@
-﻿using System;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Linq;
+﻿using System.Data.Entity.Migrations;
+using EExamWebApp.Data;
 
 namespace EExamWebApp.Migrations
 {
-    internal sealed class Configuration : DbMigrationsConfiguration<EExamWebApp.Data.AppDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<AppDbContext>
     {
         public Configuration()
         {

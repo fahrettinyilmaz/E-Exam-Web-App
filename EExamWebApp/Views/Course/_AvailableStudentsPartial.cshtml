@@ -2,13 +2,13 @@
 
 @if (Model.Students != null)
 {
-    if(Model.Students.Count()>0)
+    if (Model.Students.Count() > 0)
     {
         <select id="SelectedStudentIds" name="SelectedStudentIds" class="form-control" size="10" multiple="multiple">
             @foreach (var student in Model.Students)
             {
                 //print student count here 
-            
+
                 <option value="@student.Value">@student.Text</option>
             }
         </select>
@@ -17,5 +17,4 @@
     {
         <p>No available students found.</p>
     }
-   
 }

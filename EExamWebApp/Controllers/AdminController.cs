@@ -1,3 +1,4 @@
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using EExamWebApp.Data;
@@ -9,9 +10,12 @@ namespace EExamWebApp.Controllers
     [AuthorizeUserType(UserType.Admin)]
     public class AdminController : Controller
     {
-        private AppDbContext db = new AppDbContext();
+        private readonly AppDbContext db = new AppDbContext();
 
-
+        public ActionResult Index()
+        {
+            return View();
+        }
         public ActionResult ApproveUsers()
         {
             var usersPendingApproval = db.Users.Where(u => !u.IsApproved).ToList();
@@ -46,10 +50,7 @@ namespace EExamWebApp.Controllers
         public ActionResult EditUser(int id)
         {
             var user = db.Users.Find(id);
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
+            if (user == null) return HttpNotFound();
 
             return View(user);
         }
@@ -60,7 +61,7 @@ namespace EExamWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("ApproveUsers");
             }
@@ -71,15 +72,13 @@ namespace EExamWebApp.Controllers
         public ActionResult DeleteUser(int id)
         {
             var user = db.Users.Find(id);
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
+            if (user == null) return HttpNotFound();
 
             return View(user);
         }
 
-        [HttpPost, ActionName("DeleteUser")]
+        [HttpPost]
+        [ActionName("DeleteUser")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteUserConfirmed(int id)
         {
