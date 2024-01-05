@@ -53,6 +53,12 @@
                     <a href="@Url.Action("Index", "Questions", new { examId = exam.Id })">Edit Questions</a>
                 </td>
             }
+            else if (userRole == "Student")
+            {
+                <td>
+                    <a href="@Url.Action("Take", "Exams", new { id = exam.Id })">Take Exam</a>
+                </td>
+            }
         </tr>
     }
     </tbody>

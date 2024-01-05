@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using EExamWebApp.Data;
 using EExamWebApp.Filters;
 using EExamWebApp.Models;
+using EExamWebApp.ViewModels;
 
 namespace EExamWebApp.Controllers
 {
@@ -12,7 +13,47 @@ namespace EExamWebApp.Controllers
     public class ExamsController : BaseController
     {
         private readonly AppDbContext _db = new AppDbContext();
+    
+        [AuthorizeUserType(UserType.Student)]
+        public ActionResult Take(int id)
+        {
+            // Retrieve the exam by id from your database or service
+            var exam = _db.Exams.Where( e => e.Id == id).Include(e => e.Questions.Select(q => q.Options)).FirstOrDefault();
+            if (exam == null)
+            {
+                return HttpNotFound();
+            }
 
+            // Transform the exam data into the ExamViewModel
+            var model = new ExamViewModel
+            {
+                ExamId = exam.Id,
+                Title = exam.Title,
+                Questions = exam.Questions.Select(q => new ExamQuestionViewModel
+                {
+                    QuestionId = q.Id,
+                    QuestionText = q.Text,
+                    Options = q.Options.Select(o => new ExamOptionViewModel
+                    {
+                        OptionId = o.Id,
+                        OptionText = o.Text
+                    }).ToList()
+                }).ToList()
+            };
+
+            // Pass the model to the view
+            return View(model);
+        }
+        public ActionResult SubmitExam  (int? id)
+        {
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            var exam = _db.Exams.Find(id);
+            if (exam == null) return HttpNotFound();
+            return RedirectToAction("Index");
+        }
+        
+        
+        
         // GET: Exams
         [Authorize]
         public ActionResult Index(int? courseId)
@@ -30,6 +71,7 @@ namespace EExamWebApp.Controllers
             }
         }
 
+        [AuthorizeUserType(UserType.Teacher)]
         // GET: Exams/Details/5
         public ActionResult Details(int? id)
         {
@@ -65,24 +107,7 @@ namespace EExamWebApp.Controllers
             return View(exam);
         }
 
-        // // POST: Exams/Create
-        // // // Aşırı gönderim saldırılarından korunmak için bağlamak istediğiniz belirli özellikleri etkinleştirin. 
-        // // // Daha fazla bilgi için bkz. https://go.microsoft.com/fwlink/?LinkId=317598.
-        // [HttpPost]
-        // [ValidateAntiForgeryToken]
-        // public ActionResult Create([Bind(Include = "Id,Title,Description,CourseId,AvailableFrom,Duration")] Exam exam)
-        // {
-        //     if (ModelState.IsValid)
-        //     {
-        //         db.Exams.Add(exam);
-        //         db.SaveChanges();
-        //         return RedirectToAction("Index");
-        //     }
-        //
-        //     ViewBag.CourseId = new SelectList(db.Courses, "Id", "Title", exam.CourseId);
-        //     return View(exam);
-        // }
-
+        
         // GET: Exams/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -94,8 +119,6 @@ namespace EExamWebApp.Controllers
         }
 
         // POST: Exams/Edit/5
-        // Aşırı gönderim saldırılarından korunmak için bağlamak istediğiniz belirli özellikleri etkinleştirin. 
-        // Daha fazla bilgi için bkz. https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Title,Description,CourseId,AvailableFrom,Duration")] Exam exam)

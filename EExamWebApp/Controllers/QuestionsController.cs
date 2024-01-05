@@ -5,12 +5,13 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using EExamWebApp.Data;
+using EExamWebApp.Filters;
 using EExamWebApp.Models;
 using EExamWebApp.ViewModels;
 
 namespace EExamWebApp.Controllers
 {
-    //New
+    [AuthorizeUserType(UserType.Teacher)]
     public class QuestionsController : BaseController
     {
         private readonly AppDbContext _db = new AppDbContext();
@@ -22,14 +23,7 @@ namespace EExamWebApp.Controllers
             return View(_db.Questions.Where(q => q.ExamId == examId).ToList());
         }
 
-        // GET: Questions/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var question = _db.Questions.Find(id);
-            if (question == null) return HttpNotFound();
-            return View(question);
-        }
+        
 
         public ActionResult Create(int examId)
         {
@@ -141,8 +135,10 @@ namespace EExamWebApp.Controllers
         // GET: Questions/Delete/5
         public ActionResult Delete(int? id)
         {
+            
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             var question = _db.Questions.Find(id);
+            ViewBag.ExamId = question?.ExamId;
             if (question == null) return HttpNotFound();
             return View(question);
         }
@@ -153,11 +149,23 @@ namespace EExamWebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            // First, find the question
             var question = _db.Questions.Find(id);
+            if (question == null) return HttpNotFound();
+
+            // Find and delete all options related to the question
+            var options = _db.Options.Where(o => o.Question.Id == id).ToList();
+            foreach (var option in options)
+            {
+                _db.Options.Remove(option);
+            }
+
+            // Now, delete the question
             _db.Questions.Remove(question);
             _db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index" , new { examId = question.ExamId });
         }
+
 
         protected override void Dispose(bool disposing)
         {

@@ -209,6 +209,7 @@
         <Compile Include="ViewModels\CourseViewModel.cs"/>
         <Compile Include="ViewModels\CreateQuestionViewModel.cs"/>
         <Compile Include="ViewModels\EditAllForExamViewModel.cs"/>
+        <Compile Include="ViewModels\ExamViewModel.cs" />
         <Compile Include="ViewModels\OptionViewModel.cs"/>
         <Compile Include="ViewModels\QuestionViewModel.cs"/>
     </ItemGroup>
@@ -271,12 +272,7 @@
         <Content Include="Views\Exams\Details.cshtml"/>
         <Content Include="Views\Exams\Edit.cshtml"/>
         <Content Include="Views\Exams\Index.cshtml"/>
-        <Content Include="Views\Exam\CourseExams.cshtml"/>
-        <Content Include="Views\Exam\Create.cshtml"/>
-        <Content Include="Views\Exam\Delete.cshtml"/>
-        <Content Include="Views\Exam\Details.cshtml"/>
-        <Content Include="Views\Exam\Edit.cshtml"/>
-        <Content Include="Views\Exam\Index.cshtml"/>
+        <Content Include="Views\Exams\Take.cshtml" />
         <Content Include="Views\Options\Create.cshtml"/>
         <Content Include="Views\Options\Delete.cshtml"/>
         <Content Include="Views\Options\Details.cshtml"/>
@@ -284,15 +280,9 @@
         <Content Include="Views\Options\Index.cshtml"/>
         <Content Include="Views\Questions\Create.cshtml"/>
         <Content Include="Views\Questions\Delete.cshtml"/>
-        <Content Include="Views\Questions\Details.cshtml"/>
         <Content Include="Views\Questions\Edit.cshtml"/>
         <Content Include="Views\Questions\Index.cshtml"/>
         <Content Include="Views\Shared\AccessDenied.cshtml"/>
-        <Content Include="Views\Users\Create.cshtml"/>
-        <Content Include="Views\Users\Delete.cshtml"/>
-        <Content Include="Views\Users\Details.cshtml"/>
-        <Content Include="Views\Users\Edit.cshtml"/>
-        <Content Include="Views\Users\Index.cshtml"/>
         <Content Include="Web.config"/>
         <Content Include="Web.Debug.config">
             <DependentUpon>Web.config</DependentUpon>
