@@ -1,0 +1,62 @@
+﻿@model EExamWebApp.Models.Exam
+
+@{
+    ViewBag.Title = "Create Exam";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create Exam</h2>
+
+@using (Html.BeginForm("Create", "Exams", new { courseId = ViewBag.CourseId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" name="CourseId" value="@ViewBag.CourseId"/>
+
+    <!-- Exam Title -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.Title, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <!-- Description -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", rows = 5 } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <!-- Available From -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.AvailableFrom, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.AvailableFrom, new { htmlAttributes = new { @class = "form-control", type = "datetime-local" } })
+            @Html.ValidationMessageFor(model => model.AvailableFrom, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <!-- Duration -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.Duration, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Duration, new { htmlAttributes = new { @class = "form-control", type = "time" } })
+            @Html.ValidationMessageFor(model => model.Duration, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create Exam" class="btn btn-default"/>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

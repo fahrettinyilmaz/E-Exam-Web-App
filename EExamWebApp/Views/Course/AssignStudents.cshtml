@@ -1,121 +1,121 @@
-@model EExamWebApp.ViewModels.CourseViewModel
-
-@{
-    ViewBag.Title = "Assign Students to Course";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-@Html.Hidden("StudentEmails", Newtonsoft.Json.JsonConvert.SerializeObject(Model.StudentEmails))
-
-@using (Html.BeginForm("AssignStudents", "Course", FormMethod.Post, new { id = "addStudentsForm" }))
-{
-    @Html.AntiForgeryToken()
-    <h2>Add Students to Course</h2>
-
-    <div class="form-group">
-        @Html.LabelFor(m => m.SelectedCourseId, "Select Course")
-        @Html.DropDownListFor(m => m.SelectedCourseId, Model.Courses, "-- Select a Course --", new { @class = "form-control", id = "courseDropdown" })
-    </div>
-
-    <div id="availableStudentsContainer" style="display:none;">
-        @Html.Partial("_AvailableStudentsPartial")
-    </div>
-    <br/>
-    <button type="button" class="btn btn-primary" id="addStudentsButton">Add Students</button>
-    //todo: show here which students will be added . 
-    <div id="currentStudentsContainer">
-        @Html.Partial("_CurrentStudentsPartial")
-    </div>
-
-    <button type="submit" class="btn btn-success" id="saveButton" style="display:none;">Save Changes</button>
-}
-
-@section scripts{
-    <script>
-       $(document).ready(function () {
-           
-          $('#SelectedStudentIds').mousedown(function (e) {
-                  var $this = $(this);
-                  var currentScrollTop = $this.scrollTop(); // Scroll pozisyonunu kaydet
-          
-                  if (!e.ctrlKey && !e.metaKey) {
-                      e.preventDefault();
-          
-                      var value = $(e.target).val();
-                      var selected = $this.val() || [];
-                      var selectedIndex = selected.indexOf(value);
-          
-                      if (selectedIndex > -1) {
-                          selected.splice(selectedIndex, 1); // Seçimi kaldır
-                      } else {
-                          selected.push(value); // Seçime ekle
-                      }
-          
-                      $this.val(selected).change(); // Değişiklikleri uygula
-                  }
-          
-                  setTimeout(function() {
-                      $this.scrollTop(currentScrollTop); // Scroll pozisyonunu geri yükle
-                  }, 0);
-              });
-           
-           var studentEmails = JSON.parse($('#StudentEmails').val());
-           var $selectStudentsSection = $('#selectStudentsSection');
-           
-           // Handle course selection change
-           $('#courseDropdown').change(function () {
-                   var selectedCourseId = $(this).val() === "" ? 0 : $(this).val();
-                   if (selectedCourseId) {
-                      $('#availableStudentsContainer').show(); 
-                       console.log("show selectStudentsSection");
-                       // Axios ile GetCurrentStudents AJAX çağrısı
-                       axios.get('/Course/GetCurrentStudents/', {
-                           params: { courseId: selectedCourseId }
-                       })
-                       .then(function (response) {
-                           $('#currentStudentsContainer').html(response.data);
-                       })
-                       .catch(function (error) {
-                           console.log(error);
-                       });
-           
-                       // Axios ile getAvailableStudents AJAX çağrısı
-                       axios.get('/Course/GetAvailableStudents/', {
-                           params: { courseId: selectedCourseId }
-                       })
-                       .then(function (response) {
-                           $('#availableStudentsContainer').html(response.data);
-                       })
-                       .catch(function (error) {
-                           console.log(error);
-                       });
-
-                   } else {
-                       $('#availableStudentsContainer').hide();
-                   }
-               });
-           
-           $('#addStudentsButton').click(function () {
-               var selectedStudents = $('#SelectedStudentIds').val();
-               if (selectedStudents) {
-                   $('#saveButton').show(); // Show the save button
-                   
-                   // Iterate over each selected student ID
-                   $.each(selectedStudents, function(index, studentId) {
-                       console.log(studentId);
-                       var studentText = $("#SelectedStudentIds option[value='" + studentId + "']").text();
-                       
-                       var newRow = "<tr style='background-color: #add8e6;'><td>" + studentText + "</td><td>" + studentEmails[studentId] +"</td></tr>";
-                      
-
-                       // Append the new row to the table
-                       $('#currentStudentsContainer table tbody').prepend(newRow);
-                   });
-               }
-               
-           });
-          
-
-       });
-   </script>
-}
+@* @model EExamWebApp.ViewModels.CourseViewModel *@
+@* *@
+@* @{ *@
+@*     ViewBag.Title = "Assign Students to Course"; *@
+@*     Layout = "~/Views/Shared/_Layout.cshtml"; *@
+@* } *@
+@* *@
+@* @Html.Hidden("StudentEmails", Newtonsoft.Json.JsonConvert.SerializeObject(Model.StudentEmails)) *@
+@* *@
+@* @using (Html.BeginForm("AssignStudents", "Course", FormMethod.Post, new { id = "addStudentsForm" })) *@
+@* { *@
+@*     @Html.AntiForgeryToken() *@
+@*     <h2>Add Students to Course</h2> *@
+@* *@
+@*     <div class="form-group"> *@
+@*         @Html.LabelFor(m => m.SelectedCourseId, "Select Course") *@
+@*         @Html.DropDownListFor(m => m.SelectedCourseId, Model.Courses, "-- Select a Course --", new { @class = "form-control", id = "courseDropdown" }) *@
+@*     </div> *@
+@* *@
+@*     <div id="availableStudentsContainer" style="display:none;"> *@
+@*         @Html.Partial("_AvailableStudentsPartial") *@
+@*     </div> *@
+@*     <br/> *@
+@*     <button type="button" class="btn btn-primary" id="addStudentsButton">Add Students</button> *@
+@*     //todo: show here which students will be added .  *@
+@*     <div id="currentStudentsContainer"> *@
+@*         @Html.Partial("_CurrentStudentsPartial") *@
+@*     </div> *@
+@* *@
+@*     <button type="submit" class="btn btn-success" id="saveButton" style="display:none;">Save Changes</button> *@
+@* } *@
+@* *@
+@* @section scripts{ *@
+@*     <script> *@
+@*        $(document).ready(function () { *@
+@*             *@
+@*           $('#SelectedStudentIds').mousedown(function (e) { *@
+@*                   var $this = $(this); *@
+@*                   var currentScrollTop = $this.scrollTop(); // Scroll pozisyonunu kaydet *@
+@*            *@
+@*                   if (!e.ctrlKey && !e.metaKey) { *@
+@*                       e.preventDefault(); *@
+@*            *@
+@*                       var value = $(e.target).val(); *@
+@*                       var selected = $this.val() || []; *@
+@*                       var selectedIndex = selected.indexOf(value); *@
+@*            *@
+@*                       if (selectedIndex > -1) { *@
+@*                           selected.splice(selectedIndex, 1); // Seçimi kaldır *@
+@*                       } else { *@
+@*                           selected.push(value); // Seçime ekle *@
+@*                       } *@
+@*            *@
+@*                       $this.val(selected).change(); // Değişiklikleri uygula *@
+@*                   } *@
+@*            *@
+@*                   setTimeout(function() { *@
+@*                       $this.scrollTop(currentScrollTop); // Scroll pozisyonunu geri yükle *@
+@*                   }, 0); *@
+@*               }); *@
+@*             *@
+@*            var studentEmails = JSON.parse($('#StudentEmails').val()); *@
+@*            var $selectStudentsSection = $('#selectStudentsSection'); *@
+@*             *@
+@*            // Handle course selection change *@
+@*            $('#courseDropdown').change(function () { *@
+@*                    var selectedCourseId = $(this).val() === "" ? 0 : $(this).val(); *@
+@*                    if (selectedCourseId) { *@
+@*                       $('#availableStudentsContainer').show();  *@
+@*                        console.log("show selectStudentsSection"); *@
+@*                        // Axios ile GetCurrentStudents AJAX çağrısı *@
+@*                        axios.get('/Course/GetCurrentStudents/', { *@
+@*                            params: { courseId: selectedCourseId } *@
+@*                        }) *@
+@*                        .then(function (response) { *@
+@*                            $('#currentStudentsContainer').html(response.data); *@
+@*                        }) *@
+@*                        .catch(function (error) { *@
+@*                            console.log(error); *@
+@*                        }); *@
+@*             *@
+@*                        // Axios ile getAvailableStudents AJAX çağrısı *@
+@*                        axios.get('/Course/GetAvailableStudents/', { *@
+@*                            params: { courseId: selectedCourseId } *@
+@*                        }) *@
+@*                        .then(function (response) { *@
+@*                            $('#availableStudentsContainer').html(response.data); *@
+@*                        }) *@
+@*                        .catch(function (error) { *@
+@*                            console.log(error); *@
+@*                        }); *@
+@* *@
+@*                    } else { *@
+@*                        $('#availableStudentsContainer').hide(); *@
+@*                    } *@
+@*                }); *@
+@*             *@
+@*            $('#addStudentsButton').click(function () { *@
+@*                var selectedStudents = $('#SelectedStudentIds').val(); *@
+@*                if (selectedStudents) { *@
+@*                    $('#saveButton').show(); // Show the save button *@
+@*                     *@
+@*                    // Iterate over each selected student ID *@
+@*                    $.each(selectedStudents, function(index, studentId) { *@
+@*                        console.log(studentId); *@
+@*                        var studentText = $("#SelectedStudentIds option[value='" + studentId + "']").text(); *@
+@*                         *@
+@*                        var newRow = "<tr style='background-color: #add8e6;'><td>" + studentText + "</td><td>" + studentEmails[studentId] +"</td></tr>"; *@
+@*                        *@
+@* *@
+@*                        // Append the new row to the table *@
+@*                        $('#currentStudentsContainer table tbody').prepend(newRow); *@
+@*                    }); *@
+@*                } *@
+@*                 *@
+@*            }); *@
+@*            *@
+@* *@
+@*        }); *@
+@*    </script> *@
+@* } *@

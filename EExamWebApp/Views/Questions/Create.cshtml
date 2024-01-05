@@ -1,0 +1,61 @@
+﻿@model EExamWebApp.ViewModels.CreateQuestionViewModel
+
+@{
+    ViewBag.Title = "Add Questions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Add Questions to Exam @Model.ExamId</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.ExamId)
+
+    <div id="questionList">
+        @* Dynamic question fields will be added here *@
+    </div>
+
+    <input type="button" value="Add Question" onclick="addQuestion()" class="btn btn-primary" />
+    <input type="submit" value="Submit Questions" class="btn btn-success" />
+}
+
+@section Scripts {
+    <script>
+        var questionIndex = 0;
+
+        function addQuestion() {
+            var questionHtml = '<div class="question">' +
+                '<h4>Question ' + (questionIndex + 1) + '</h4>' +
+                '<input type="text" name="Questions[' + questionIndex + '].Text" />' +
+                '<div class="options">' +
+                // Options will be added here
+                '</div>' +
+                '<button type="button" onclick="addOption(this, ' + questionIndex + ')" class="btn btn-secondary">Add Option</button>' +
+                '</div>';
+        
+            $('#questionList').append(questionHtml);
+            questionIndex++;
+        }
+        
+        function addOption(button, questionIndex) {
+            var optionIndex = $(button).prev('.options').children().length;
+            var optionHtml = '<div class="option">' +
+                '<input type="text" name="Questions[' + questionIndex + '].Options[' + optionIndex + '].Text" />' +
+                '<input type="hidden" name="Questions[' + questionIndex + '].Options[' + optionIndex + '].IsCorrect" value="false" />' +
+                '<input type="checkbox" onchange="checkboxChanged(this)" />' +
+                '</div>';
+        
+            $(button).prev('.options').append(optionHtml);
+        }
+        
+        function checkboxChanged(checkbox) {
+            var hiddenField = $(checkbox).prev('input[type="hidden"]');
+            hiddenField.val(checkbox.checked ? 'true' : 'false');
+        }
+
+
+
+    </script>
+}

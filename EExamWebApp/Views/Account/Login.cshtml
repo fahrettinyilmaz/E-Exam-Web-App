@@ -5,19 +5,20 @@
     Layout = "../Shared/_Layout.cshtml";
 }
 
-<h2>Login</h2>
+<div class="body-content">
+    <h2>Login</h2>
 
-@using (Html.BeginForm("Login", "Account", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-    <div>
-        <label for="Username">Username</label>
-        @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
-    </div>
-    <div>
-        <label for="Password">Password</label>
-        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-    </div>
-    <br/>
-    <button type="submit" class="btn btn-primary">Login</button>
-}
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div>
+            <label for="Username">Username</label>
+            @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+        </div>
+        <div>
+            <label for="Password">Password</label>
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    }
+</div>

@@ -25,8 +25,7 @@ namespace EExamWebApp.Controllers
         {
             if (User.Identity.IsAuthenticated)
                 ViewBag.UserFullName = GetCurrentUser().Name + " " + GetCurrentUser().LastName;
-            else
-                ViewBag.UserRole = "Guest";
+            ViewBag.UserRole = GetUserRole();
             return View();
         }
 

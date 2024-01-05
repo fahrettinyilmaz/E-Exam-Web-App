@@ -1,58 +1,58 @@
-@model IEnumerable<EExamWebApp.Models.Course>
-
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Course List";
-}
-
-<h2>Course List</h2>
-@if (ViewBag.UserRole== "Admin")
-{
-    <p>
-        @Html.ActionLink("Create Course", "CreateCourse", "Course", null, new { @class = "btn btn-primary" })  @Html.ActionLink("Create Course", "CreateCourse", "Course", null, new { @class = "btn btn-primary" })
-    </p>
-}
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Student Count</th>
-            @if (ViewBag.UserRole as string != "Teacher")
-            {
-                <th>Teacher</th>
-            }
-            
-            <th>Number of Exams</th>
-            <th>Details</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var course in Model)
-    {
-        <tr>
-            <td>@course.Id</td>
-            <td>@course.Title</td>
-            <td>@course.Description</td>
-            <td>@course.Enrollments.Count</td>
-            @if (ViewBag.UserRole as string != "Teacher")
-            {
-                <td>@(course.Teacher.Name + " " + course.Teacher.LastName)</td>
-
-            }
-            <td>@course.Exams.Count()</td>
-            <td>
-                @if(ViewBag.UserRole as string == "Admin")
-                {
-                    <a href="@Url.Action("Index", "Course", new { id = course.Id })" class="btn btn-warning">Edit</a>
-                    <a href="@Url.Action("Index", "Course", new { id = course.Id })" class="btn btn-danger">Delete</a>
-                }
-                
-                
-                <a href="@Url.Action("Exams", "Course", new { courseId = course.Id })" class="btn btn-primary">Details</a>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+@* @model IEnumerable<EExamWebApp.Models.Course> *@
+@* *@
+@* @{ *@
+@*     Layout = "~/Views/Shared/_Layout.cshtml"; *@
+@*     ViewBag.Title = "Course List"; *@
+@* } *@
+@* *@
+@* <h2>Course List</h2> *@
+@* @if (ViewBag.UserRole== "Admin") *@
+@* { *@
+@*     <p> *@
+@*         @Html.ActionLink("Create Course", "CreateCourse", "Course", null, new { @class = "btn btn-primary" })  @Html.ActionLink("Create Course", "CreateCourse", "Course", null, new { @class = "btn btn-primary " }) *@
+@*     </p> *@
+@* } *@
+@* <table class="table"> *@
+@*     <thead> *@
+@*         <tr> *@
+@*             <th>ID</th> *@
+@*             <th>Title</th> *@
+@*             <th>Description</th> *@
+@*             <th>Student Count</th> *@
+@*             @if (ViewBag.UserRole as string != "Teacher") *@
+@*             { *@
+@*                 <th>Teacher</th> *@
+@*             } *@
+@* *@
+@*             <th>Number of Exams</th> *@
+@*             <th>Details</th> *@
+@*         </tr> *@
+@*     </thead> *@
+@*     <tbody> *@
+@*     @foreach (var course in Model) *@
+@*     { *@
+@*         <tr> *@
+@*             <td>@course.Id</td> *@
+@*             <td>@course.Title</td> *@
+@*             <td>@course.Description</td> *@
+@*             <td>@course.Enrollments.Count</td> *@
+@*             @if (ViewBag.UserRole as string != "Teacher") *@
+@*             { *@
+@*                 <td>@(course.Teacher.Name + " " + course.Teacher.LastName)</td> *@
+@* *@
+@*             } *@
+@*             <td>@course.Exams.Count()</td> *@
+@*             <td> *@
+@*                 @if(ViewBag.UserRole as string == "Admin") *@
+@*                 { *@
+@*                     <a href="@Url.Action("Index", "Course", new { id = course.Id })" class="btn btn-warning">Edit</a> *@
+@*                     <a href="@Url.Action("Index", "Course", new { id = course.Id })" class="btn btn-danger">Delete</a> *@
+@*                 } *@
+@* *@
+@* *@
+@*                 <a href="@Url.Action("Exams", "Course", new { courseId = course.Id })" class="btn btn-primary">Details</a> *@
+@*             </td> *@
+@*         </tr> *@
+@*     } *@
+@*     </tbody> *@
+@* </table> *@

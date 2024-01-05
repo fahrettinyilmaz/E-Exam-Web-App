@@ -1,0 +1,61 @@
+@model List<EExamWebApp.Models.Exam>
+
+@{
+    ViewBag.Title = "Exams";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var userRole = ViewBag.UserRole as string;
+}
+
+<h2>Exams</h2>
+
+@if (userRole == "Teacher")
+{
+    <p>
+        @Html.ActionLink("Create Exam", "Create", "Exams",
+            new { courseId = ViewBag.CourseId }, // Route values
+            new { @class = "btn btn-secondary" } // HTML attributes
+        )
+    </p>
+}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Available From</th>
+        <th>Duration</th>
+        @if (userRole == "Teacher")
+        {
+            <th>Actions</th>
+        }
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var exam in Model)
+    {
+        <tr>
+            <td>@exam.Title</td>
+            <td>@exam.Description</td>
+            <td>@exam.AvailableFrom.ToString("dd/MM/yyyy HH:mm")</td>
+            <td>
+                @if (exam.Duration is TimeSpan)
+                {
+                    @exam.Duration.ToString(@"hh\:mm\:ss") // For TimeSpan
+                }
+                else
+                {
+                    @exam.Duration.ToString() // For int (minutes)
+                }
+            </td>
+            @if (userRole == "Teacher")
+            {
+                <td>
+                    <a href="@Url.Action("Edit", "Exams", new { id = exam.Id })">Edit</a> |
+                    <a href="@Url.Action("Delete", "Exams", new { id = exam.Id })">Delete</a>
+                </td>
+            }
+        </tr>
+    }
+    </tbody>
+</table>

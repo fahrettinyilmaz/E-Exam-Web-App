@@ -15,8 +15,8 @@ namespace EExamWebApp
             );
             routes.MapRoute(
                 "GetCurrentStudents",
-                "Course/GetCurrentStudents/{id}",
-                new { controller = "Course", action = "GetCurrentStudents" }
+                "Enrollments/GetCurrentStudents/{id}",
+                new { controller = "Courses", action = "GetCurrentStudents" }
             );
             routes.MapRoute(
                 "Default",

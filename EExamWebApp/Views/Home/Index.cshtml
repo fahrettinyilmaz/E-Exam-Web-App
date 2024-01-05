@@ -11,9 +11,15 @@
     <p>Welcome back, <strong>@ViewBag.UserFullName</strong>!</p>
     <!-- Buttons for Course List, Upcoming Exams, Exam Results -->
     <div class="buttons-container">
-        @Html.ActionLink("Course List", "ListCourses", "Course", new { }, new { @class = "btn btn-info" })
-        @Html.ActionLink("Users Exams", "Index", "Course", new { }, new { @class = "btn btn-warning" })
-        @Html.ActionLink("Exam Results", "Index", "Course", new { }, new { @class = "btn btn-success" })
+        @Html.ActionLink("Course List", "Index", "Courses", new { }, new { @class = "btn btn-info" })
+        @Html.ActionLink("Users Exams", "Index", "Courses", new { }, new { @class = "btn btn-warning" })
+        @Html.ActionLink("Exam Results", "Index", "Courses", new { }, new { @class = "btn btn-success" })
+        @if(ViewBag.UserRole == "Admin")
+        {
+            @Html.ActionLink("Approve Users", "ApproveUsers", "Admin", null, new { @class = "btn btn-primary " })
+        }
+        
+
     </div>
 }
 else

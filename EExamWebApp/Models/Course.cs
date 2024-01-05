@@ -8,11 +8,10 @@ namespace EExamWebApp.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public virtual ICollection<Exam> Exams { get; set; }
-        
+
         public int TeacherId { get; set; }
         public virtual User Teacher { get; set; }
-        
-        public virtual ICollection<Enrollment> Enrollments { get; set; }
 
+        public virtual ICollection<Enrollment> Enrollments { get; set; }
     }
 }

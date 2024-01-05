@@ -148,10 +148,15 @@
         <Compile Include="Controllers\AdminController.cs"/>
         <Compile Include="Controllers\BaseController.cs"/>
         <Compile Include="Controllers\CourseController.cs"/>
-        <Compile Include="Controllers\EnrollmentController.cs" />
+        <Compile Include="Controllers\CoursesController.cs"/>
+        <Compile Include="Controllers\EnrollmentsController.cs"/>
         <Compile Include="Controllers\ErrorController.cs"/>
         <Compile Include="Controllers\ExamController.cs"/>
+        <Compile Include="Controllers\ExamsController.cs"/>
         <Compile Include="Controllers\HomeController.cs"/>
+        <Compile Include="Controllers\OptionsController.cs"/>
+        <Compile Include="Controllers\QuestionsController.cs"/>
+        <Compile Include="Controllers\UsersController.cs"/>
         <Compile Include="Data\AppDbContext.cs"/>
         <Compile Include="Filters\AuthorizeUserTypeAttribute.cs"/>
         <Compile Include="Global.asax.cs">
@@ -173,13 +178,17 @@
         <Compile Include="Migrations\202401040821215_CourseIdAdded2.Designer.cs">
             <DependentUpon>202401040821215_CourseIdAdded2.cs</DependentUpon>
         </Compile>
-        <Compile Include="Migrations\202401041532010_ExamDateDuration.cs" />
+        <Compile Include="Migrations\202401041532010_ExamDateDuration.cs"/>
         <Compile Include="Migrations\202401041532010_ExamDateDuration.Designer.cs">
-          <DependentUpon>202401041532010_ExamDateDuration.cs</DependentUpon>
+            <DependentUpon>202401041532010_ExamDateDuration.cs</DependentUpon>
         </Compile>
-        <Compile Include="Migrations\202401041652084_TeacherIdAddedCourse.cs" />
+        <Compile Include="Migrations\202401041652084_TeacherIdAddedCourse.cs"/>
         <Compile Include="Migrations\202401041652084_TeacherIdAddedCourse.Designer.cs">
-          <DependentUpon>202401041652084_TeacherIdAddedCourse.cs</DependentUpon>
+            <DependentUpon>202401041652084_TeacherIdAddedCourse.cs</DependentUpon>
+        </Compile>
+        <Compile Include="Migrations\202401050940549_ExamIdAddedQuestion.cs"/>
+        <Compile Include="Migrations\202401050940549_ExamIdAddedQuestion.Designer.cs">
+            <DependentUpon>202401050940549_ExamIdAddedQuestion.cs</DependentUpon>
         </Compile>
         <Compile Include="Migrations\Configuration.cs"/>
         <Compile Include="Models\Course.cs"/>
@@ -191,6 +200,10 @@
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="Seeders\DbInitializer.cs"/>
         <Compile Include="ViewModels\CourseViewModel.cs"/>
+        <Compile Include="ViewModels\CreateQuestionViewModel.cs"/>
+        <Compile Include="ViewModels\EditAllForExamViewModel.cs"/>
+        <Compile Include="ViewModels\OptionViewModel.cs"/>
+        <Compile Include="ViewModels\QuestionViewModel.cs"/>
     </ItemGroup>
     <ItemGroup>
         <Content Include="Content\bootstrap-theme.css"/>
@@ -221,23 +234,58 @@
         <Content Include="Views\Admin\CreateUser.cshtml"/>
         <Content Include="Views\Admin\DeleteUser.cshtml"/>
         <Content Include="Views\Admin\EditUser.cshtml"/>
-        <Content Include="Views\Admin\Index.cshtml" />
+        <Content Include="Views\Admin\Index.cshtml"/>
         <Content Include="Views\Admin\ListUsers.cshtml"/>
+        <Content Include="Views\Courses\Create.cshtml"/>
+        <Content Include="Views\Courses\Delete.cshtml"/>
+        <Content Include="Views\Courses\Details.cshtml"/>
+        <Content Include="Views\Courses\Edit.cshtml"/>
+        <Content Include="Views\Courses\Exams.cshtml"/>
+        <Content Include="Views\Courses\Index.cshtml"/>
+        <Content Include="Views\Courses\_CurrentStudentsPartial.cshtml"/>
         <Content Include="Views\Course\AssignStudents.cshtml"/>
         <Content Include="Views\Course\AssignTeacher.cshtml"/>
-        <Content Include="Views\Course\CreateCourse.cshtml"/>
-        <Content Include="Views\Course\Exams.cshtml" />
+        <Content Include="Views\Course\Create.cshtml"/>
+        <Content Include="Views\Course\Exams.cshtml"/>
         <Content Include="Views\Course\Index.cshtml"/>
-        <Content Include="Views\Course\ListCourses.cshtml" />
+        <Content Include="Views\Course\ListCourses.cshtml"/>
         <Content Include="Views\Course\_AvailableStudentsPartial.cshtml"/>
         <Content Include="Views\Course\_CurrentStudentsPartial.cshtml"/>
-        <Content Include="Views\Exam\CourseExams.cshtml" />
+        <Content Include="Views\Enrollments\AssignStudents.cshtml"/>
+        <Content Include="Views\Enrollments\Create.cshtml"/>
+        <Content Include="Views\Enrollments\Delete.cshtml"/>
+        <Content Include="Views\Enrollments\Details.cshtml"/>
+        <Content Include="Views\Enrollments\Edit.cshtml"/>
+        <Content Include="Views\Enrollments\Index.cshtml"/>
+        <Content Include="Views\Enrollments\_AvailableStudentsPartial.cshtml"/>
+        <Content Include="Views\Enrollments\_CurrentStudentsPartial.cshtml"/>
+        <Content Include="Views\Exams\Create.cshtml"/>
+        <Content Include="Views\Exams\Delete.cshtml"/>
+        <Content Include="Views\Exams\Details.cshtml"/>
+        <Content Include="Views\Exams\Edit.cshtml"/>
+        <Content Include="Views\Exams\Index.cshtml"/>
+        <Content Include="Views\Exam\CourseExams.cshtml"/>
         <Content Include="Views\Exam\Create.cshtml"/>
         <Content Include="Views\Exam\Delete.cshtml"/>
         <Content Include="Views\Exam\Details.cshtml"/>
         <Content Include="Views\Exam\Edit.cshtml"/>
         <Content Include="Views\Exam\Index.cshtml"/>
+        <Content Include="Views\Options\Create.cshtml"/>
+        <Content Include="Views\Options\Delete.cshtml"/>
+        <Content Include="Views\Options\Details.cshtml"/>
+        <Content Include="Views\Options\Edit.cshtml"/>
+        <Content Include="Views\Options\Index.cshtml"/>
+        <Content Include="Views\Questions\Create.cshtml"/>
+        <Content Include="Views\Questions\Delete.cshtml"/>
+        <Content Include="Views\Questions\Details.cshtml"/>
+        <Content Include="Views\Questions\Edit.cshtml"/>
+        <Content Include="Views\Questions\Index.cshtml"/>
         <Content Include="Views\Shared\AccessDenied.cshtml"/>
+        <Content Include="Views\Users\Create.cshtml"/>
+        <Content Include="Views\Users\Delete.cshtml"/>
+        <Content Include="Views\Users\Details.cshtml"/>
+        <Content Include="Views\Users\Edit.cshtml"/>
+        <Content Include="Views\Users\Index.cshtml"/>
         <Content Include="Web.config"/>
         <Content Include="Web.Debug.config">
             <DependentUpon>Web.config</DependentUpon>
@@ -283,10 +331,13 @@
             <DependentUpon>202401040821215_CourseIdAdded2.cs</DependentUpon>
         </EmbeddedResource>
         <EmbeddedResource Include="Migrations\202401041532010_ExamDateDuration.resx">
-          <DependentUpon>202401041532010_ExamDateDuration.cs</DependentUpon>
+            <DependentUpon>202401041532010_ExamDateDuration.cs</DependentUpon>
         </EmbeddedResource>
         <EmbeddedResource Include="Migrations\202401041652084_TeacherIdAddedCourse.resx">
-          <DependentUpon>202401041652084_TeacherIdAddedCourse.cs</DependentUpon>
+            <DependentUpon>202401041652084_TeacherIdAddedCourse.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Migrations\202401050940549_ExamIdAddedQuestion.resx">
+            <DependentUpon>202401050940549_ExamIdAddedQuestion.cs</DependentUpon>
         </EmbeddedResource>
     </ItemGroup>
     <PropertyGroup>

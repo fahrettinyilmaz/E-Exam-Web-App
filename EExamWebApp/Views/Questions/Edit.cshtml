@@ -1,0 +1,57 @@
+﻿@model EExamWebApp.ViewModels.EditAllForExamViewModel
+
+@{
+    ViewBag.Title = "Edit All Questions for Exam";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit Questions for Exam @Model.ExamId</h2>
+
+@using (Html.BeginForm("Edit", "Questions", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(m => m.ExamId)
+
+    for (var i = 0; i < Model.Questions.Count; i++)
+    {
+        <h3>Question @i</h3>
+
+        @Html.HiddenFor(m => m.Questions[i].QuestionId)
+
+        <!-- Question Text -->
+        <div class="form-group">
+            @Html.LabelFor(m => m.Questions[i].Text, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(m => m.Questions[i].Text, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.Questions[i].Text, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Options for this Question -->
+        for (var j = 0; j < Model.Questions[i].Options.Count; j++)
+        {
+            <div class="form-group">
+                @Html.HiddenFor(m => m.Questions[i].Options[j].Id)
+                @Html.LabelFor(m => m.Questions[i].Options[j].Text, "Option " + (j + 1), new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(m => m.Questions[i].Options[j].Text, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(m => m.Questions[i].Options[j].Text, "", new { @class = "text-danger" })
+                    @Html.CheckBoxFor(m => m.Questions[i].Options[j].IsCorrect)
+                    @Html.LabelFor(m => m.Questions[i].Options[j].IsCorrect, "Is Correct")
+                </div>
+            </div>
+        }
+    }
+
+    <!-- Submit Button -->
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save Changes" class="btn btn-default"/>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

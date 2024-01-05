@@ -1,0 +1,35 @@
+﻿@model IEnumerable<EExamWebApp.Models.Question>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Questions of Exam</h2>
+
+<p>
+    @Html.ActionLink("Create Questions", "Create", "Questions", new { examId = ViewBag.ExamId }, null)
+    @Html.ActionLink("Edit Questions", "Edit", "Questions", new { examId = ViewBag.ExamId }, null)
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Text)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Text)
+            </td>
+            <td>
+
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>

@@ -10,17 +10,33 @@ namespace EExamWebApp.Controllers
     [AuthorizeUserType(UserType.Admin)]
     public class AdminController : Controller
     {
-        private readonly AppDbContext db = new AppDbContext();
+        private readonly AppDbContext _db = new AppDbContext();
 
         public ActionResult Index()
         {
             return View();
         }
+        
         public ActionResult ApproveUsers()
         {
-            var usersPendingApproval = db.Users.Where(u => !u.IsApproved).ToList();
+            var usersPendingApproval = _db.Users.Where(u => !u.IsApproved).ToList();
             return View(usersPendingApproval);
         }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ApproveUsers(int id)
+        {
+            var user = _db.Users.Find(id);
+            if (user == null) return HttpNotFound();
+
+            user.IsApproved = true;
+            _db.Entry(user).State = EntityState.Modified;
+            _db.SaveChanges();
+
+            return RedirectToAction("ApproveUsers");
+        }
+
 
         public ActionResult CreateUser()
         {
@@ -29,7 +45,7 @@ namespace EExamWebApp.Controllers
 
         public ActionResult ListUsers()
         {
-            var users = db.Users.ToList();
+            var users = _db.Users.ToList();
             return View(users);
         }
 
@@ -39,8 +55,8 @@ namespace EExamWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Users.Add(user);
-                db.SaveChanges();
+                _db.Users.Add(user);
+                _db.SaveChanges();
                 return RedirectToAction("ApproveUsers");
             }
 
@@ -49,7 +65,7 @@ namespace EExamWebApp.Controllers
 
         public ActionResult EditUser(int id)
         {
-            var user = db.Users.Find(id);
+            var user = _db.Users.Find(id);
             if (user == null) return HttpNotFound();
 
             return View(user);
@@ -61,8 +77,8 @@ namespace EExamWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(user).State = EntityState.Modified;
-                db.SaveChanges();
+                _db.Entry(user).State = EntityState.Modified;
+                _db.SaveChanges();
                 return RedirectToAction("ApproveUsers");
             }
 
@@ -71,7 +87,7 @@ namespace EExamWebApp.Controllers
 
         public ActionResult DeleteUser(int id)
         {
-            var user = db.Users.Find(id);
+            var user = _db.Users.Find(id);
             if (user == null) return HttpNotFound();
 
             return View(user);
@@ -82,9 +98,9 @@ namespace EExamWebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteUserConfirmed(int id)
         {
-            var user = db.Users.Find(id);
-            db.Users.Remove(user);
-            db.SaveChanges();
+            var user = _db.Users.Find(id);
+            _db.Users.Remove(user);
+            _db.SaveChanges();
             return RedirectToAction("ApproveUsers");
         }
     }

@@ -6,8 +6,6 @@ using System.Web.Security;
 using EExamWebApp.Data;
 using EExamWebApp.Models;
 
-// Include any other necessary namespaces
-
 namespace EExamWebApp.Controllers
 {
     public class AccountController : Controller
