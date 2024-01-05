@@ -286,3 +286,5 @@
 /Users/fahrettinyilmaz/Desktop/EExamWebApp/EExamWebApp/obj/Debug/EExamWebApp.csproj.CopyComplete
 /Users/fahrettinyilmaz/Desktop/EExamWebApp/EExamWebApp/obj/Debug/EExamWebApp.dll
 /Users/fahrettinyilmaz/Desktop/EExamWebApp/EExamWebApp/obj/Debug/EExamWebApp.pdb
+/Users/fahrettinyilmaz/Desktop/EExamWebApp/EExamWebApp/obj/Debug/EExamWebApp.Migrations.AddedResultAndEnrollmentFinalScore.resources
+/Users/fahrettinyilmaz/Desktop/EExamWebApp/EExamWebApp/obj/Debug/EExamWebApp.Migrations.ResultTableAdded.resources
