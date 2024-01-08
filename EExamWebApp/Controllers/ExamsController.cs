@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -44,32 +45,99 @@ namespace EExamWebApp.Controllers
             // Pass the model to the view
             return View(model);
         }
-        public ActionResult SubmitExam  (int? id)
+        
+        [HttpPost]
+        public ActionResult SubmitExam(ExamViewModel model)
         {
-            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var exam = _db.Exams.Find(id);
-            if (exam == null) return HttpNotFound();
-            return RedirectToAction("Index");
+            if (model == null || !ModelState.IsValid)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            // Retrieve the relevant exam from the database
+            var exam = _db.Exams.Include(e => e.Questions.Select(q => q.Options))
+                .FirstOrDefault(e => e.Id == model.ExamId);
+
+            if (exam == null)
+            {
+                // Handle the case where the exam does not exist
+                return HttpNotFound();
+            }
+
+            int correctAnswers = 0;
+
+            // Iterate through each question in the submitted model
+            foreach (var questionViewModel in model.Questions)
+            {
+              
+                
+                    // Check if the selected option is the correct one
+                    var selectedOption = _db.Options.FirstOrDefault(o => o.Id == questionViewModel.SelectedOptionId);
+                    if (selectedOption != null && selectedOption.IsCorrect)
+                    {
+                        correctAnswers++;
+                    }
+                
+            }
+
+            // Calculate the score, e.g., as a percentage
+            double score = (double)correctAnswers / exam.Questions.Count * 100;
+
+            // Create a new Result object
+            var result = new Result
+            {
+                UserId = GetCurrentUserId(),
+                ExamId = model.ExamId,
+                Score = score,
+                ExamDate = DateTime.Now
+            };
+
+            // Save the result to the database
+            _db.Results.Add(result);
+            _db.SaveChanges();
+
+            // Redirect to a confirmation page, result page, or elsewhere as appropriate
+            return RedirectToAction("Index", "Exams", new { courseId = exam.CourseId });
         }
+
         
         
         
         // GET: Exams
         [Authorize]
         public ActionResult Index(int? courseId)
-        {
+        {   
+            ViewBag.CourseId = courseId;
             ViewBag.UserRole = GetUserRole();
             if (courseId == null)
-                // Handle the missing parameter case, e.g., redirect to another page or show an error message
-                return RedirectToAction("Index"); // Example redirection
+            {
+                return RedirectToAction("Index"); // Redirect as appropriate
+            }
 
+            var userId = GetCurrentUserId();
+                
             using (var context = new AppDbContext())
             {
-                var exams = context.Exams.Where(e => e.CourseId == courseId.Value).ToList();
-                ViewBag.CourseId = courseId.Value;
-                return View(exams);
+                var exams = context.Exams
+                    .Where(e => e.CourseId == courseId.Value)
+                    .ToList();
+        
+                var examsWithResults = exams.Select(exam => new ExamWithResultViewModel
+                {
+                    Exam = exam,
+                    Result = context.Results.FirstOrDefault(r => r.ExamId == exam.Id && r.UserId == userId)
+                }).ToList();
+
+                var viewModel = new ExamIndexViewModel
+                {
+                    ExamsWithResults = examsWithResults,
+                    CourseId = courseId.Value
+                };
+
+                return View(viewModel);
             }
         }
+
 
         [AuthorizeUserType(UserType.Teacher)]
         // GET: Exams/Details/5
@@ -127,11 +195,12 @@ namespace EExamWebApp.Controllers
             {
                 _db.Entry(exam).State = EntityState.Modified;
                 _db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index" , "Exams", new { courseId = exam.CourseId });
             }
 
             ViewBag.CourseId = new SelectList(_db.Courses, "Id", "Title", exam.CourseId);
-            return View(exam);
+            return RedirectToAction("Index", "Exams", new { courseId = exam.CourseId });
+
         }
 
         // GET: Exams/Delete/5
@@ -143,18 +212,34 @@ namespace EExamWebApp.Controllers
             return View(exam);
         }
 
-        // POST: Exams/Delete/5
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var exam = _db.Exams.Find(id);
-            _db.Exams.Remove(exam);
-            _db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+            var exam = _db.Exams.Include(e => e.Questions.Select(q => q.Options))
+                .FirstOrDefault(e => e.Id == id);
 
+            if (exam != null)
+            {
+                // First, remove all related options
+                foreach (var question in exam.Questions.ToList())
+                {
+                    _db.Options.RemoveRange(question.Options);
+                }
+
+                // Next, remove the questions themselves
+                _db.Questions.RemoveRange(exam.Questions);
+
+                // Finally, remove the exam
+                _db.Exams.Remove(exam);
+
+                // Save changes to the database
+                _db.SaveChanges();
+            }
+
+            return RedirectToAction("Index", "Exams", new { courseId = exam.CourseId });
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing) _db.Dispose();

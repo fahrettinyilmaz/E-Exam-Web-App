@@ -1,9 +1,11 @@
-﻿@model List<EExamWebApp.Models.Exam>
+﻿@model EExamWebApp.ViewModels.ExamIndexViewModel
 
 @{
     ViewBag.Title = "Exams";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var userRole = ViewBag.UserRole as string;
+    var currentDate = DateTime.Now;
+    var courseId = ViewBag.CourseId as int?;
 }
 
 <h2>Exams</h2>
@@ -11,55 +13,89 @@
 @if (userRole == "Teacher")
 {
     <p>
-        @Html.ActionLink("Create Exam", "Create", "Exams", new { courseId = ViewBag.CourseId }, new { @class = "btn btn-secondary" })
+        @Html.ActionLink("Create Exam", "Create", "Exams", new { courseId = courseId }, new { @class = "btn btn-secondary" })
     </p>
 }
 
 <table class="table">
     <thead>
-    <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Available From</th>
-        <th>Duration</th>
-        @if (userRole == "Teacher")
-        {
-            <th>Actions</th>
-        }
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var exam in Model)
-    {
         <tr>
-            <td>@exam.Title</td>
-            <td>@exam.Description</td>
-            <td>@exam.AvailableFrom.ToString("dd/MM/yyyy HH:mm")</td>
-            <td>
-                @if (exam.Duration is TimeSpan)
-                {
-                    @exam.Duration.ToString(@"hh\:mm\:ss") // For TimeSpan
-                }
-                else
-                {
-                    @exam.Duration.ToString() // For int (minutes)
-                }
-            </td>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Available From</th>
+            <th>Duration</th>
             @if (userRole == "Teacher")
             {
-                <td>
-                    <a href="@Url.Action("Edit", "Exams", new { id = exam.Id })">Edit</a> |
-                    <a href="@Url.Action("Delete", "Exams", new { id = exam.Id })">Delete</a> |
-                    <a href="@Url.Action("Index", "Questions", new { examId = exam.Id })">Edit Questions</a>
-                </td>
-            }
-            else if (userRole == "Student")
-            {
-                <td>
-                    <a href="@Url.Action("Take", "Exams", new { id = exam.Id })">Take Exam</a>
-                </td>
+                <th>Actions</th>
             }
         </tr>
-    }
+    </thead>
+    <tbody>
+         @foreach (var item in Model.ExamsWithResults)
+        {
+            var exam = item.Exam;
+            <tr>
+                <td>@exam.Title</td>
+                <td>@exam.Description</td>
+                <td>@exam.AvailableFrom.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    @if (exam.Duration is TimeSpan)
+                    {
+                        @exam.Duration.ToString(@"hh\:mm\:ss")
+                    }
+                    else
+                    {
+                        @exam.Duration.ToString()
+                    }
+                </td>
+                @if (userRole == "Teacher")
+                {
+                    <td>
+                        <a href="@Url.Action("Edit", "Exams", new { id = exam.Id })">Edit</a> |
+                        <a href="@Url.Action("Delete", "Exams", new { id = exam.Id })">Delete</a> |
+                        <a href="@Url.Action("Index", "Questions", new { examId = exam.Id })">Edit Questions</a>
+                    </td>
+                }
+                else if (userRole == "Student")
+                {
+                    <td>
+                        @if (item.Result != null)
+                        {
+                            <text>Result: @item.Result.Score</text>
+                            <!-- Add more result details if necessary -->
+                        }
+                        else
+                        {
+                            TimeSpan timeDifference = exam.AvailableFrom - currentDate;
+                            if (currentDate >= exam.AvailableFrom && currentDate <= exam.AvailableFrom.AddMinutes(5))
+                            {
+                                <a href="@Url.Action("Take", "Exams", new { id = exam.Id })">Take Exam</a>
+                            }
+                            else if (timeDifference.TotalMinutes > 0)
+                            {
+                                
+                                    if (timeDifference.TotalDays >= 1)
+                                    {
+                                        <p>You can take the exam after @timeDifference.Days day(s)</p>
+                                    }
+                                    else if (timeDifference.TotalHours >= 1)
+                                    {
+                                        <p>You can take the exam after @timeDifference.Hours hour(s)</p>
+                                    }
+                                    else
+                                    {
+                                        <p>You can take the exam after @timeDifference.Minutes minute(s)</p>
+                                    }
+                              
+                            }
+                            else
+                            {
+                                <text>You are late to join the exam</text>
+                            }
+                        }
+                    </td>
+                }
+            </tr>
+        }
     </tbody>
 </table>

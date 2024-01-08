@@ -210,6 +210,7 @@
         <Compile Include="ViewModels\CreateQuestionViewModel.cs"/>
         <Compile Include="ViewModels\EditAllForExamViewModel.cs"/>
         <Compile Include="ViewModels\ExamViewModel.cs" />
+        <Compile Include="ViewModels\ExamWithResultViewModel.cs" />
         <Compile Include="ViewModels\OptionViewModel.cs"/>
         <Compile Include="ViewModels\QuestionViewModel.cs"/>
     </ItemGroup>
